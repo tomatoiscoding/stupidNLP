@@ -10,7 +10,7 @@ import pandas as pd
 
 # define function
 
-class Scrape(object):
+class Scrapy(object):
 	"""docstring for Scrape"""
 	def __init__(self, url):
 		super(Scrape, self).__init__()
