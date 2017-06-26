@@ -136,7 +136,7 @@ First, split a paragraph into sentences.
 Second, train word2vec
 """
 # raw['summary'][0]
-import pands as pd
+import pandas as pd
 import nltk.data
 tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 
