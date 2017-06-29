@@ -95,20 +95,24 @@ from bs4 import BeautifulSoup
 
 words = [w for w in words if not w in stopwords.words("english")]
 
-def clean_review(raw_data):
+def clean_review(raw_data, remove_stopwords = False):
 	review_text = BeautifulSoup(raw_data).get_text()
 	review_letters = re.sub("[^a-zA-Z]", " ", review_text)
 	words = review_letters.lower().split()
-	stops = set(stopwords.words("english"))
-	meaningful_words = [w for w in words if not w in stops]
-	return( " ".join( meaningful_words))
+	if remove_stopwords:
+		stops = set(stopwords.words("english"))
+		words = [w for w in words if not w in stops]
+	return(" ".join(words))
 
-num_reviews = train["outputText"].size
+num_reviews = train["review"].size
 
 clean_train_reviews = []
-
+# clean_test_reviews = []
 for i in xrange(0, num_reviews):
-    clean_train_reviews.append(clean_review(train["outputText"][i]))
+    clean_train_reviews.append(clean_review(train["review"][i]))
+# num_reviews = test['review'].size
+for i in xrange(0, num_reviews):
+    clean_test_reviews.append(clean_review(test["review"][i]))
 
 # bag of words
 
@@ -167,7 +171,31 @@ from gensim.models import word2vec
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s',
     level=logging.INFO)
 
-model = word2vec.Word2Vec(all_sentences, size=100, min_count = 40,
+model = word2vec.Word2Vec(all_sentences, size=300, min_count = 40,
             window = 10, sample = 0.001)
 
 model.save(model_name)
+
+test = []
+t_star = []
+for sent in raw['review\tstar']:
+	temp = sent.split('\t')
+	test.append(temp[0])
+	t_star.append(temp[1])
+
+test = pd.DataFrame({
+	'review': test,
+	'star': t_star
+	})
+train = []
+tr_star = []
+for sent in raw['review\tstar']:
+	temp = sent.split('\t')
+	train.append(temp[0])
+	tr_star.append(temp[1])
+
+train = pd.DataFrame({
+	'review': train,
+	'star': tr_star
+	})
+

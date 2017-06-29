@@ -13,7 +13,7 @@ import pandas as pd
 class Scrapy(object):
 	"""docstring for Scrape"""
 	def __init__(self, url):
-		super(Scrape, self).__init__()
+		super(Scrapy, self).__init__()
 		self.url = url
 	def get_item(self):
 		review_res = []
@@ -51,7 +51,19 @@ res_all_review = []
 res_all_star = []
 for i in range(1, 311):
 	url = 'http://bestbuy.ugc.bazaarvoice.com/3545w/5465700/reviews.djs?format=embeddedhtml&page=%s&scrollToTop=true' % i
-	obj = Scrape(url)
+	obj = Scrapy(url)
+	res = obj.get_item()
+	res_all_review.append(res[0])
+	res_all_star.append(res[1])
+for i in range(1, 1383):
+	url = 'https://bestbuy.ugc.bazaarvoice.com/3545w/8532557/reviews.djs?format=embeddedhtml&page=%s&scrollToTop=true' % i
+	obj = Scrapy(url)
+	res = obj.get_item()
+	res_all_review.append(res[0])
+	res_all_star.append(res[1])
+for i in range(1, 732):
+	url = 'https://bestbuy.ugc.bazaarvoice.com/3545w/5579211/reviews.djs?format=embeddedhtml&page=%s&scrollToTop=true' % i
+	obj = Scrapy(url)
 	res = obj.get_item()
 	res_all_review.append(res[0])
 	res_all_star.append(res[1])
@@ -62,4 +74,5 @@ train = pd.DataFrame({
 	'review': all_review,
 	'star': all_star
 	})
-train.to_csv('/Users/bianbeilei/review.csv', sep = ',', encoding = 'utf-8')
+train.to_csv('/Users/bianbeilei/review14.csv', sep = ',', encoding = 'utf-8')
+
